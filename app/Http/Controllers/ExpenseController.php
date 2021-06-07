@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
@@ -15,7 +16,13 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $expenses = DB::table('expenses')
+            ->join('categories', 'expenses.category_id', '=', 'categories.id')
+            ->select('expenses.*', 'categories.name')
+            ->where('expenses.user_id', auth()->user()->id)
+            ->get();
+
+        return view('home', ['expenses' => $expenses]);
     }
 
     /**
@@ -23,7 +30,11 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        return view('create', ['categories' => Category::get()]);
+        return view('create', [
+            'categories' => Category::where('user_id', auth()->user()->id)
+                ->orWhere('user_id', null)
+                ->get(),
+        ]);
     }
 
     /**
@@ -32,20 +43,28 @@ class ExpenseController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-    {
+    {;
         $this->validate($request, [
-            'date' => 'required',
-            'amount' => 'required',
-            'category_id' => 'required'
+            'date' => 'required|date',
+            'amount' => 'required|integer',
+            'category_id' => 'required_without:category',
+            'category' => 'required_without:category_id'
         ]);
+
+        if (!$request->category_id) {
+            $category = Category::firstOrCreate([
+                'name' => $request->category,
+                'user_id' => $request->user()->id
+            ]);
+        }
 
         Expense::create([
             'user_id' => $request->user()->id,
             'date' => $request->date,
             'amount' => $request->amount,
-            'category_id' => $request->category_id,
+            'category_id' => $request->category_id ?? $category->id
         ])->save();
 
-        return back();
+        return redirect('home');
     }
 }

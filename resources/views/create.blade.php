@@ -7,20 +7,33 @@
                 <form action="{{ route('store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="">Date</label>
-                        <input type="date" class="form-control" name="date">
+                        <label for="">Date: </label>
+                        <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}">
+                        @error('date')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-group">
-                        <label for="">Amount</label>
-                        <input type="number" class="form-control" name="amount">
+                        <label for="">Amount: </label>
+                        <input type="number" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}">
+                        @error('amount')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                     <div class="form-group">
+                        <label for="">Choose Category: </label>
                         <select class="form-select" aria-label="Default select example" name="category_id">
-                            <option selected>Category</option>
+                            <option selected></option>
                             @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
+                        <label for="">Or Add Default: </label>
+                        <input type="text" name="category">
                     </div>
                     <button type="submit" class="btn btn-success">Create</button>
                 </form>

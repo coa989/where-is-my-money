@@ -18,19 +18,17 @@
             function drawChart() {
 
                 // Create the data table.
-                var data = new google.visualization.arrayToDataTable();
-                data.addColumn('string', 'Topping');
-                data.addColumn('number', 'Slices');
-                data.addRows([
-                    ['Mushrooms', 3],
-                    ['Onions', 1],
-                    ['Olives', 1],
-                    ['Zucchini', 1],
-                    ['Pepperoni', 2]
+                var data = new google.visualization.arrayToDataTable([
+                    ['Category', 'Amount'],
+                    @php
+                        foreach($expenses as $expense) {
+                            echo "['".$expense->name."', ".$expense->amount."],";
+                        }
+                    @endphp
                 ]);
 
                 // Set chart options
-                var options = {'title':'How Much Pizza I Ate Last Night',
+                var options = {'title':'Total Expenses',
                     'width':400,
                     'height':300};
 
@@ -39,12 +37,10 @@
                 chart.draw(data, options);
             }
         </script>
+        <!--Div that will hold the pie chart-->
+        <div id="chart_div"></div>
 
     </div>
-</div>
-<div class="container">
-    <!--Div that will hold the pie chart-->
-    <div id="chart_div"></div>
 </div>
 
 
