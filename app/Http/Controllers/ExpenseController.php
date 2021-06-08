@@ -18,11 +18,21 @@ class ExpenseController extends Controller
     {
         $expenses = DB::table('expenses')
             ->join('categories', 'expenses.category_id', '=', 'categories.id')
-            ->select('expenses.*', 'categories.name')
+            ->select('expenses.*', 'categories.name as category')
             ->where('expenses.user_id', auth()->user()->id)
             ->get();
+        $categoryExp = $expenses->groupBy('category_id');
 
-        return view('home', ['expenses' => $expenses]);
+        $categoryExpWithCount = $categoryExp->map(function ($group) {
+           return [
+               'category' => $group->first()->category,
+               'amount' => $group->sum('amount')
+           ];
+        });
+        if (count($categoryExpWithCount) == 0) {
+            return redirect('create');
+        }
+        return view('home', ['expenses' => $categoryExpWithCount]);
     }
 
     /**

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes();
-
+// TODO create middleware group
 Route::get('/home', [App\Http\Controllers\ExpenseController::class, 'index'])->middleware('auth')->name('home');
 Route::get('/create', [App\Http\Controllers\ExpenseController::class, 'create'])->middleware('auth')->name('create');
 Route::post('/store', [App\Http\Controllers\ExpenseController::class, 'store'])->middleware('auth')->name('store');

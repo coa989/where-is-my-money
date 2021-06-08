@@ -22,7 +22,7 @@
                     ['Category', 'Amount'],
                     @php
                         foreach($expenses as $expense) {
-                            echo "['".$expense->name."', ".$expense->amount."],";
+                            echo "['".$expense['category']."', ".$expense['amount']."],";
                         }
                     @endphp
                 ]);
