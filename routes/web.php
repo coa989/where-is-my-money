@@ -12,12 +12,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Auth::routes();
-// TODO create middleware group
-Route::get('/home', [App\Http\Controllers\ExpenseController::class, 'index'])->middleware('auth')->name('home');
-Route::get('/create', [App\Http\Controllers\ExpenseController::class, 'create'])->middleware('auth')->name('create');
-Route::get('/structure', [App\Http\Controllers\ExpenseController::class, 'structure'])->middleware('auth')->name('structure');
-Route::post('/store', [App\Http\Controllers\ExpenseController::class, 'store'])->middleware('auth')->name('store');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [App\Http\Controllers\ExpenseController::class, 'index'])->name('home');
+    Route::get('/create', [App\Http\Controllers\ExpenseController::class, 'create'])->name('create');
+    Route::get('/structure', [App\Http\Controllers\ExpenseController::class, 'structure'])->name('total-structure');
+    Route::get('/structure/{days}', [App\Http\Controllers\ExpenseController::class, 'structureByDays'])->name('days-structure');
+    Route::post('/store', [App\Http\Controllers\ExpenseController::class, 'store'])->name('store');
+});
 
 

@@ -68,28 +68,39 @@ class ExpenseController extends Controller
      */
     public function structure()
     {
-        // TODO refactor method
-        $expenses = DB::table('expenses')
-            ->join('categories', 'expenses.category_id', '=', 'categories.id')
-            ->select('expenses.*', 'categories.name as category')
-            ->where('expenses.user_id', auth()->user()->id)
-            ->get();
+        $expenses = Expense::where('user_id', auth()->user()->id)->with('category')->get();
+
         $categoryExp = $expenses->groupBy('category_id');
 
         $categoryExpWithCount = $categoryExp->map(function ($group) {
             return [
                 'category' => $group->first()->category,
-                'amount' => $group->sum('amount')
+                'amount' => $group->sum('amount'),
             ];
         });
 
-        return view('expenses/total', ['expenses' => $categoryExpWithCount]);
+        return view('expenses/total-structure', ['expenses' => $categoryExpWithCount]);
     }
 
-    public function getByDate()
+    /**
+     * @param $days
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function structureByDays($days)
     {
-        $date = \Carbon\Carbon::today()->subDays(7);
-        $data = Expense::where('date', '>=', $date)->where('user_id', auth()->user()->id)->get();
-        dd($data);
+        $date = \Carbon\Carbon::today()->subDays($days);
+
+        $expenses = Expense::where('date', '>=', $date)->where('user_id', auth()->user()->id)->with('category')->get();
+
+        $categoryExp = $expenses->groupBy('category_id');
+
+        $categoryExpWithCount = $categoryExp->map(function ($group) {
+            return [
+                'category' => $group->first()->category,
+                'amount' => $group->sum('amount'),
+            ];
+        });
+
+        return view('expenses/days-structure', ['expenses' => $categoryExpWithCount]);
     }
 }

@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="dropdown-item" href="{{ route('structure') }}">
+                                <a class="dropdown-item" href="{{ route('total-structure') }}">
                                     {{ __('Expenses Structure') }}
                                 </a>
                             </li>
@@ -83,7 +83,6 @@
                 </div>
             </div>
         </nav>
-
         <main class="py-4">
             @yield('content')
         </main>
