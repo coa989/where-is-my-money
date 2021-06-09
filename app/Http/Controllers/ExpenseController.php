@@ -16,23 +16,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = DB::table('expenses')
-            ->join('categories', 'expenses.category_id', '=', 'categories.id')
-            ->select('expenses.*', 'categories.name as category')
-            ->where('expenses.user_id', auth()->user()->id)
-            ->get();
-        $categoryExp = $expenses->groupBy('category_id');
+        $expenses = Expense::with('category', 'user')->where('user_id', auth()->user()->id)->latest()->get();
 
-        $categoryExpWithCount = $categoryExp->map(function ($group) {
-           return [
-               'category' => $group->first()->category,
-               'amount' => $group->sum('amount')
-           ];
-        });
-        if (count($categoryExpWithCount) == 0) {
-            return redirect('create');
-        }
-        return view('home', ['expenses' => $categoryExpWithCount]);
+        return view('expenses/home', ['expenses' => $expenses]);
     }
 
     /**
@@ -40,7 +26,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        return view('create', [
+        return view('expenses/create', [
             'categories' => Category::where('user_id', auth()->user()->id)
                 ->orWhere('user_id', null)
                 ->get(),
@@ -76,5 +62,34 @@ class ExpenseController extends Controller
         ])->save();
 
         return redirect('home');
+    }
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function structure()
+    {
+        // TODO refactor method
+        $expenses = DB::table('expenses')
+            ->join('categories', 'expenses.category_id', '=', 'categories.id')
+            ->select('expenses.*', 'categories.name as category')
+            ->where('expenses.user_id', auth()->user()->id)
+            ->get();
+        $categoryExp = $expenses->groupBy('category_id');
+
+        $categoryExpWithCount = $categoryExp->map(function ($group) {
+            return [
+                'category' => $group->first()->category,
+                'amount' => $group->sum('amount')
+            ];
+        });
+
+        return view('expenses/total', ['expenses' => $categoryExpWithCount]);
+    }
+
+    public function getByDate()
+    {
+        $date = \Carbon\Carbon::today()->subDays(7);
+        $data = Expense::where('date', '>=', $date)->where('user_id', auth()->user()->id)->get();
+        dd($data);
     }
 }
