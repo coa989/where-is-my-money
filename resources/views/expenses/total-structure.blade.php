@@ -4,6 +4,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            @if(!$expenses->first())
+                <h4>No Records!</h4>
+            @else
             <script type="text/javascript">
 
                 // Load the Visualization API and the corechart package.
@@ -28,7 +31,7 @@
                     ]);
 
                     // Set chart options
-                    var options = {'title':'Total Expenses Structure',
+                    var options = {'title':'Expenses Structure',
                         'width':400,
                         'height':300};
 
@@ -39,14 +42,15 @@
             </script>
             <!--Div that will hold the pie chart-->
             <div id="chart_div"></div>
+            @endif
         </div>
         <div class="container">
             <div class="row justify-content-center">
-                <a href="{{ route('total-structure') }}"><button class="btn btn-info">All Time</button></a>
-                <a href="{{ route('days-structure', 7) }}"><button class="btn btn-success">Last Week</button></a>
-                <a href="{{ route('days-structure', 30) }}"><button class="btn btn-primary">This Month</button></a>
-                <a href="{{ route('days-structure', 180) }}"><button class="btn btn-secondary">Last 6 Months</button></a>
-                <a href="{{ route('days-structure', 365) }}"><button class="btn btn-dark">Last Year</button></a>
+                <a href="{{ route('total.structure') }}"><button class="btn btn-info">All Time</button></a>
+                <a href="{{ route('days.structure', 7) }}"><button class="btn btn-success">Last Week</button></a>
+                <a href="{{ route('days.structure', 30) }}"><button class="btn btn-primary">This Month</button></a>
+                <a href="{{ route('days.structure', 180) }}"><button class="btn btn-secondary">Last 6 Months</button></a>
+                <a href="{{ route('days.structure', 365) }}"><button class="btn btn-dark">Last Year</button></a>
              </div>
         </div>
     </div>

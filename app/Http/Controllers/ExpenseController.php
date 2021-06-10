@@ -26,6 +26,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
+        // TODO Restrict expense create without account created
         return view('expenses/create', [
             'categories' => Category::where('user_id', auth()->user()->id)
                 ->orWhere('user_id', null)
@@ -61,7 +62,9 @@ class ExpenseController extends Controller
             'category_id' => $request->category_id ?? $category->id
         ])->save();
 
-        return redirect('home');
+        // TODO when create expense substract from account balance
+
+        return redirect('expenses/home');
     }
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -79,7 +82,7 @@ class ExpenseController extends Controller
             ];
         });
 
-        return view('expenses/total-structure', ['expenses' => $categoryExpWithCount]);
+        return view('expenses/total.structure', ['expenses' => $categoryExpWithCount]);
     }
 
     /**
@@ -101,6 +104,6 @@ class ExpenseController extends Controller
             ];
         });
 
-        return view('expenses/days-structure', ['expenses' => $categoryExpWithCount]);
+        return view('expenses/days.structure', ['expenses' => $categoryExpWithCount]);
     }
 }

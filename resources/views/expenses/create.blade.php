@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="{{ route('store') }}" method="post">
+                <form action="{{ route('store.expense') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="">Date: </label>
@@ -26,14 +26,19 @@
                     </div>
                     <div class="form-group">
                         <label for="">Choose Category: </label>
-                        <select class="form-select" aria-label="Default select example" name="category_id">
+                        <select class="form-control" aria-label="Default select example" name="category_id">
                             <option selected></option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                         <label for="">Or Add Default: </label>
-                        <input type="text" name="category">
+                        <input type="text" name="category" class="form-control @error('category') is-invalid @enderror" value="{{ old('category') }}">
+                        @error('category')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                     <button type="submit" class="btn btn-success">Create</button>
                 </form>

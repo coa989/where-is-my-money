@@ -18,7 +18,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <th scope="row">{{ $expense->date }}</th>
+                        <th scope="row">{{ \Carbon\Carbon::parse($expense->date)->diffForHumans() }}</th>
                         <th scope="row">{{ $expense->amount }}</th>
                         <th scope="row">{{ $expense->category->name }}</th>
                     </tr>
