@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="{{ route('store.expense') }}" method="post">
+                <form action="{{ route('expense.store') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="">Date: </label>

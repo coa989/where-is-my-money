@@ -51,21 +51,29 @@
                                 </li>
                             @endif
                         @else
+                            @if(!\App\Models\Account::where('user_id', auth()->id())->first())
                             <li class="nav-item">
-                                <a class="dropdown-item" href="{{ route('create.account') }}">
+                                <a class="dropdown-item" href="{{ route('account.create') }}">
                                     {{ __('Create Account') }}
                                 </a>
                             </li>
+                            @else
                             <li class="nav-item">
-                                <a class="dropdown-item" href="{{ route('create.expense') }}">
+                                <a class="dropdown-item" href="{{ route('account.show', \App\Models\Account::where('user_id', auth()->id())->first()) }}">
+                                    Balance: {{ \App\Models\Account::where('user_id', auth()->id())->first()->balance }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="dropdown-item" href="{{ route('expense.create') }}">
                                     {{ __('Add Expenses') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="dropdown-item" href="{{ route('total.structure') }}">
+                                <a class="dropdown-item" href="{{ route('structure.total') }}">
                                     {{ __('Expenses Structure') }}
                                 </a>
                             </li>
+                            @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}

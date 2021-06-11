@@ -42,16 +42,16 @@
             </script>
             <!--Div that will hold the pie chart-->
             <div id="chart_div"></div>
-            @endif
+                @endif
         </div>
         <div class="container">
             <div class="row justify-content-center">
-                <a href="{{ route('total.structure') }}"><button class="btn btn-info">All Time</button></a>
-                <a href="{{ route('days.structure', 7) }}"><button class="btn btn-success">Last Week</button></a>
-                <a href="{{ route('days.structure', 30) }}"><button class="btn btn-primary">This Month</button></a>
-                <a href="{{ route('days.structure', 180) }}"><button class="btn btn-secondary">Last 6 Months</button></a>
-                <a href="{{ route('days.structure', 365) }}"><button class="btn btn-dark">Last Year</button></a>
-             </div>
+                <a href="{{ route('structure.total') }}"><button class="btn btn-info">All Time</button></a>
+                <a href="{{ route('structure.days', 7) }}"><button class="btn btn-success">Last Week</button></a>
+                <a href="{{ route('structure.days', 30) }}"><button class="btn btn-primary">This Month</button></a>
+                <a href="{{ route('structure.days', 180) }}"><button class="btn btn-secondary">Last 6 Months</button></a>
+                <a href="{{ route('structure.days', 365) }}"><button class="btn btn-dark">Last Year</button></a>
+            </div>
         </div>
     </div>
 @endsection

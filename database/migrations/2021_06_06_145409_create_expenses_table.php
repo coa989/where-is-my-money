@@ -19,6 +19,7 @@ class CreateExpensesTable extends Migration
             $table->timestamp('date');
             $table->integer('amount');
             $table->foreignId('category_id')->constrained();
+            $table->foreignId('account_id')->constrained();
             $table->timestamps();
         });
     }
