@@ -26,7 +26,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        return view('acount.create');
+        return view('account.create');
     }
 
     /**
@@ -79,6 +79,7 @@ class AccountController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param Account $account
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, Account $account)
     {
@@ -107,6 +108,4 @@ class AccountController extends Controller
 
         return redirect('expenses/home');
     }
-// TODO on delete destroy all expenses for this account
-
 }

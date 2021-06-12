@@ -46,7 +46,7 @@ class User extends Authenticatable
         return $this->hasMany(Expense::class);
     }
 
-    public function accounts()
+    public function account()
     {
         return $this->hasOne(Account::class);
     }

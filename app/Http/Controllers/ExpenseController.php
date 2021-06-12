@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\Expense;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +46,7 @@ class ExpenseController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
-    {;
+    {
         $this->validate($request, [
             'date' => ['required', 'date'],
             'amount' => ['required','integer'],
@@ -64,10 +65,11 @@ class ExpenseController extends Controller
             'user_id' => $request->user()->id,
             'date' => $request->date,
             'amount' => $request->amount,
-            'category_id' => $request->category_id ?? $category->id
+            'category_id' => $request->category_id ?? $category->id,
+            'account_id' => $request->user()->account()->first()->id
         ])->save();
 
-        $account = Account::where('user_id', auth()->id())->first();
+        $account = $request->user()->account()->first();
 
         $newBalance = $account->balance - $request->amount;
 

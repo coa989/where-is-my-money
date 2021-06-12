@@ -16,7 +16,7 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('expense_id')->constrained()->cascadeOnDelete();
+//            $table->foreignId('expense_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->integer('balance');
             $table->timestamps();
