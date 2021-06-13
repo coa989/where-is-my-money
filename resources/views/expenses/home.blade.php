@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('status'))
+        <div class="container alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
 <div class="container">
     <div class="row justify-content-center">
         @if(!$expenses->first())

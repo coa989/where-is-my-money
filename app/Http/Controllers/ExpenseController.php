@@ -28,7 +28,6 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        // TODO Implement flash message
         if (!Account::where('user_id', auth()->id())->first()) {
             return redirect('account/create');
         }
@@ -75,7 +74,7 @@ class ExpenseController extends Controller
 
         $account->update(['balance' => $newBalance]);
 
-        return redirect('expenses/home');
+        return redirect('expenses/home')->with('status', 'Record created successfully');
     }
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector

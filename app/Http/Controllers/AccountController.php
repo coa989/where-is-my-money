@@ -8,7 +8,6 @@ use voku\helper\ASCII;
 
 class AccountController extends Controller
 {
-    // TODO Only account owner can access
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +48,7 @@ class AccountController extends Controller
             'balance' => $request->balance,
         ])->save();
 
-        return redirect('expenses/create');
+        return redirect('expenses/create')->with('status', 'Account successfully created!');
     }
 
     /**
@@ -93,7 +92,7 @@ class AccountController extends Controller
             'balance' => $request->balance
         ]);
 
-        return redirect()->route('account.show', $account);
+        return redirect()->route('account.show', $account)->with('status', 'Account successfully updated!');
     }
 
     /**
@@ -106,6 +105,6 @@ class AccountController extends Controller
     {
         Account::find($account->id)->delete();
 
-        return redirect('expenses/home');
+        return redirect('expenses/home')->with('status', 'Account successfully deleted!');
     }
 }

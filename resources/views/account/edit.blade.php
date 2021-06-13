@@ -6,6 +6,7 @@
             <div class="col-md-8">
                 <form action="{{ route('account.update', $account) }}" method="post">
                     @csrf
+                    @method('PUT')
                     <div class="form-group">
                         <label for="">Name: </label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $account->name }}">
