@@ -26,11 +26,13 @@ Route::middleware('auth')->prefix('expenses')->group(function () {
     Route::post('/store', [App\Http\Controllers\ExpenseController::class, 'store'])->name('expense.store');
 });
 
-Route::middleware('auth')->prefix('account')->group(function () {
+Route::middleware( 'auth')->prefix('account')->group(function () {
     Route::get('/create', [\App\Http\Controllers\AccountController::class, 'create'])->name('account.create');
     Route::post('/store', [\App\Http\Controllers\AccountController::class, 'store'])->name('account.store');
-    Route::get('/{account}/show', [\App\Http\Controllers\AccountController::class, 'show'])->name('account.show');
-    Route::get('/{account}/edit', [\App\Http\Controllers\AccountController::class, 'edit'])->name('account.edit');
-    Route::put('/{account}/update', [\App\Http\Controllers\AccountController::class, 'update'])->name('account.update');
-    Route::delete('/{account}/destroy', [\App\Http\Controllers\AccountController::class, 'destroy'])->name('account.destroy');
+    Route::middleware('owner')->group(function () {
+        Route::get('/{account}/show', [\App\Http\Controllers\AccountController::class, 'show'])->name('account.show');
+        Route::get('/{account}/edit', [\App\Http\Controllers\AccountController::class, 'edit'])->name('account.edit');
+        Route::put('/{account}/update', [\App\Http\Controllers\AccountController::class, 'update'])->name('account.update');
+        Route::delete('/{account}/destroy', [\App\Http\Controllers\AccountController::class, 'destroy'])->name('account.destroy');
+    });
 });
