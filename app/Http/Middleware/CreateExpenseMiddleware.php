@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Account;
 use Closure;
 use Illuminate\Http\Request;
 
-class OwnerMiddleware
+class CreateExpenseMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,12 +17,9 @@ class OwnerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $model = array_values($request->route()->parameters())[0];
-
-        if ($model->user_id != auth()->user()->id) {
-            abort(403);
+        if (!Account::where('user_id', auth()->id())->first()) {
+            return redirect('account/create');
         }
-
         return $next($request);
     }
 }

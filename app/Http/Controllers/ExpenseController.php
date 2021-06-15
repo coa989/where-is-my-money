@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExpenseRequest;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\Expense;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
@@ -18,7 +17,10 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::with('category', 'user')->where('user_id', auth()->id())->latest()->get();
+        $expenses = Expense::with('category', 'user')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
 
         return view('expenses/home', ['expenses' => $expenses]);
     }
@@ -28,14 +30,12 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        if (!Account::where('user_id', auth()->id())->first()) {
-            return redirect('account/create');
-        }
+        $categories = Category::where('user_id', auth()->id())
+            ->orWhere('user_id', null)
+            ->get();
 
         return view('expenses.create', [
-            'categories' => Category::where('user_id', auth()->id())
-                ->orWhere('user_id', null)
-                ->get(),
+            'categories' => $categories,
         ]);
     }
 
@@ -44,15 +44,8 @@ class ExpenseController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(StoreExpenseRequest $request)
     {
-        $this->validate($request, [
-            'date' => ['required', 'date'],
-            'amount' => ['required','integer'],
-            'category_id' => ['required_without:category'],
-            'category' => ['required_without:category_id']
-        ]);
-
         if (!$request->category_id) {
             $category = Category::firstOrCreate([
                 'name' => $request->category,
@@ -66,7 +59,7 @@ class ExpenseController extends Controller
             'amount' => $request->amount,
             'category_id' => $request->category_id ?? $category->id,
             'account_id' => $request->user()->account()->first()->id
-        ])->save();
+        ]);
 
         $account = $request->user()->account()->first();
 
@@ -81,7 +74,10 @@ class ExpenseController extends Controller
      */
     public function structure()
     {
-        $expenses = Expense::where('user_id', auth()->id())->with('category')->get()->groupBy('category_id');
+        $expenses = Expense::where('user_id', auth()->id())
+            ->with('category')
+            ->get()
+            ->groupBy('category_id');
 
         $expensesByCategory = $expenses->map(function ($group) {
             return [
@@ -101,7 +97,11 @@ class ExpenseController extends Controller
     {
         $date = \Carbon\Carbon::today()->subDays($days);
 
-        $expenses = Expense::where('date', '>=', $date)->where('user_id', auth()->id())->with('category')->get()->groupBy('category_id');
+        $expenses = Expense::where('date', '>=', $date)
+            ->where('user_id', auth()->id())
+            ->with('category')
+            ->get()
+            ->groupBy('category_id');
 
         $expensesByCategory = $expenses->map(function ($group) {
             return [

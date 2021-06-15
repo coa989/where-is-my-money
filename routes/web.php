@@ -20,10 +20,10 @@ Auth::routes();
 
 Route::middleware('auth')->prefix('expenses')->group(function () {
     Route::get('/home', [App\Http\Controllers\ExpenseController::class, 'index'])->name('expenses');
-    Route::get('/create', [App\Http\Controllers\ExpenseController::class, 'create'])->name('expense.create');
     Route::get('/structure', [App\Http\Controllers\ExpenseController::class, 'structure'])->name('structure.total');
-    Route::get('/structure/{days}', [App\Http\Controllers\ExpenseController::class, 'structureByDays'])->name('structure.days');
+    Route::get('/structure/{days}', [App\Http\Controllers\ExpenseController::class, 'structureByDays'])->where('days', '[0-9]+')->name('structure.days');
     Route::post('/store', [App\Http\Controllers\ExpenseController::class, 'store'])->name('expense.store');
+    Route::get('/create', [App\Http\Controllers\ExpenseController::class, 'create'])->middleware('create.expense')->name('expense.create');
 });
 
 Route::middleware( 'auth')->prefix('account')->group(function () {

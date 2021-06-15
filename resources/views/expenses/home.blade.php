@@ -13,7 +13,6 @@
         @else
             <h4>Last Records Overview</h4>
             <table class="table">
-                @foreach($expenses as $expense)
                     <thead>
                     <tr>
                         <th scope="col">Date</th>
@@ -22,13 +21,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    @foreach($expenses as $expense)
+                        <tr>
                         <th scope="row">{{ \Carbon\Carbon::parse($expense->date)->diffForHumans() }}</th>
                         <th scope="row">{{ $expense->amount }}</th>
                         <th scope="row">{{ $expense->category->name }}</th>
                     </tr>
+                    @endforeach
                     </tbody>
-                @endforeach
             </table>
         @endif
     </div>
